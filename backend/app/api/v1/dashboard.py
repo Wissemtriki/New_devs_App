@@ -15,11 +15,13 @@ async def get_dashboard_summary(
     
     revenue_data = await get_revenue_summary(property_id, tenant_id)
     
-    total_revenue_float = float(revenue_data['total'])
+    # Keep as string from Decimal to preserve exact precision.
+    # Converting via float (e.g. float("333.333") * 3) causes sub-cent rounding errors.
+    total_revenue_str = revenue_data['total']
     
     return {
         "property_id": revenue_data['property_id'],
-        "total_revenue": total_revenue_float,
+        "total_revenue": total_revenue_str,
         "currency": revenue_data['currency'],
         "reservations_count": revenue_data['count']
     }
